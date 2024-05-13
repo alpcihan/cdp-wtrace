@@ -1,0 +1,3 @@
+[submodule "wtrace"]
+    path = wtrace
+    url = https://github.com/alpcihan/wtrace

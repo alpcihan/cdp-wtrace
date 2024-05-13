@@ -1,0 +1,154 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package CDP.API;
+
+service CdpService {
+  // Asks for real-time updates of scene data whenever it becomes available.
+  rpc GetSceneDataStream(google.protobuf.Empty) returns (stream GetSceneDataResponse);
+  
+  // Request to change scene data on the server.
+  rpc UpdateSceneData(UpdateSceneDataRequest) returns (UpdateSceneDataResponse);
+  
+  // Inform the server about the client's view position and rotation in the scene.
+  rpc UpdateClientPose(stream UpdateClientPoseRequest) returns (google.protobuf.Empty);
+
+  // Pings
+  rpc GetScenePingStream(google.protobuf.Empty) returns (stream GetScenePingResponse);
+  rpc AddClientPing(AddClientPingRequest) returns (google.protobuf.Empty);
+}
+
+
+// =============================================================================
+// Scene data.
+// =============================================================================
+
+message GetSceneDataResponse {
+  // Note that the initial response may need to be chunked if we would exceed
+  // gRPC's maximum reasonable message size (~4 MB). All chunks after the first
+  // can be treated like any regular update message (with a lot of added objects).
+
+  // True for the first message or when the scene is changed and old scene data
+  // should be discarded.
+  bool is_initial = 1;
+
+  // List of top-level objects in the scene. For partial messages, the list only
+  // includes added or modified entries.
+  repeated ObjectData objects = 2;
+  
+  // For partial messages, this list contains object IDs that should be deleted.
+  repeated uint32 delete_ids = 3;
+
+  // Maybe add some fields with geographical data here (scene lat/lng, scale).
+}
+
+message UpdateSceneDataRequest {
+  // List of added or modified objects. Objects may contain children in order to
+  // add an entire object tree at once.
+  // Anything with ID 0 is added, anything with ID > 0 is modified.
+  repeated ObjectData objects = 1;
+  
+  // List of object IDs that should be deleted.
+  repeated uint32 delete_ids = 2;
+}
+
+message UpdateSceneDataResponse {
+  // For each added object (ID = 0 in the request), this list contains
+  // the new ID that the server assigned to the object.
+  // Object trees are flattened into this list through an in-order traversal.
+  // Example:
+  //  * UpdateSceneDataRequest contained new object A (children A1, A2) and B (child B1).
+  //  * added_ids will contain new ids in this order: [A, A1, A2, B, B1]
+  repeated uint32 added_ids = 1;
+}
+
+
+// Describes any object in the scene hierarchy.
+message ObjectData {
+  enum ObjectType {
+    kGeneric = 0;
+    kStorey = 1;
+    kWall = 2;
+    kRoof = 3;
+    kFloor = 4;
+    kCeiling = 5;
+    kBuildingPart = 6;
+    kContour = 7;
+    kBuilding = 8;
+  }
+
+  // Unique id across session.
+  uint32 id = 1;
+
+  ObjectType type = 2;
+  
+  // Optional: 3D mesh data.
+  Mesh mesh = 3;
+
+  // Position of this object relative to its parent.
+  // If not set, assumed to be (0,0,0).
+  Vector3 position = 5;
+
+  // Rotation of this object relative to its parent in euler angles.
+  // If not set, assumed to be (0,0,0).
+  Vector3 rotation_angles = 6;
+
+  // List of children attached to this object.
+  repeated ObjectData children = 4;
+}
+
+message Mesh {
+  repeated Vector3 vertices = 1;
+  // Vertex indices that make up the triangles.
+  repeated uint32 indices = 2;
+  
+  // optional data associated with vertices
+  repeated Vector3 normals = 3;
+
+  // Single color for the mesh in RGB format (blue is lowest byte).
+  uint32 color_rgb = 4;
+}
+
+
+// =============================================================================
+// Client management.
+// =============================================================================
+message UpdateClientPoseRequest {
+  string client_id = 1;
+  Vector3 position = 2;
+  Vector3 forward_direction = 3;
+}
+
+
+// =============================================================================
+// Pings
+// =============================================================================
+message GetScenePingResponse {
+  ScenePing ping = 1;
+  uint32 duration_millis = 2;
+}
+
+message AddClientPingRequest {
+  ScenePing ping = 1;
+}
+
+message ScenePing {
+  oneof target {
+      Vector3 location = 1;
+      // See ObjectData::id.
+      uint32 id = 2;
+  }
+  uint32 color_rgb = 3;
+  // maybe add indication who pinged (CDP || client)?
+}
+
+
+// =============================================================================
+// Base
+// =============================================================================
+message Vector3 {
+  float x = 1;
+  float y = 2;
+  float z = 3;
+}

@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "useDefineForClassFields": true,
+    "module": "commonjs",
+    "lib": ["es2017", "DOM", "DOM.Iterable"],
+    "skipLibCheck": true,
+    "types": [
+      "node",
+      "@webgpu/types"
+    ],
+
+    /* Bundler mode */
+    //"moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "strictPropertyInitialization": false,
+    "noImplicitAny": false
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "wtrace-cdp",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build"
+  },
+  "dependencies": {
+    "socket.io-client": "^4.7.5",
+    "wtrace": "file:../wtrace",
+    "three": "^0.139.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.5.0",
+    "@types/socket.io-client": "^3.0.0",
+    "@webgpu/types": "^0.1.21",
+    "@types/three": "^0.159.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0"
+  }
+}
