@@ -1,3 +1,5 @@
+@echo off
+
 REM run cdp-wtrace server
 REM run cdp-wtrace web application
 

@@ -20,8 +20,10 @@ var cdp_proto = grpc.loadPackageDefinition(
 ).CDP.API;
 
 function connect(address, getSceneDataStreamCallback) {
+  // connect to CDP server
   var client = new cdp_proto.CdpService(address, grpc.credentials.createInsecure());
 
+  // send an example GetSceneDataStream request
   client.GetSceneDataStream({}, function (err, response) {
     getSceneDataStreamCallback(response);
   });

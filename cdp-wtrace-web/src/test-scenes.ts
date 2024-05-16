@@ -1,5 +1,6 @@
 import * as wt from "wtrace";
 import * as THREE from "three";
+import { degToRad } from "three/src/math/MathUtils";
 
 export async function createCornellBoxScene(): Promise<wt.Scene> {
     // create the scene
@@ -232,20 +233,21 @@ export async function createMeetManScene(): Promise<wt.Scene> {
     let scene: wt.Scene = new wt.Scene();
 
     // load meshes
+    
     let headMesh: wt.Mesh | undefined = await wt.MeshLoader.load("assets/models/meetman/head.obj");
     let bodyMesh: wt.Mesh | undefined = await wt.MeshLoader.load("assets/models/meetman/body.obj");
-    let xyzMesh: wt.Mesh | undefined = await wt.MeshLoader.load("assets/xyz.obj");
-    let cubeMesh: wt.Mesh | undefined = await wt.MeshLoader.load("assets/cube.obj");
+    let xyzMesh: wt.Mesh | undefined = await wt.MeshLoader.load("assets/models/xyz.obj");
+    let cubeMesh: wt.Mesh | undefined = await wt.MeshLoader.load("assets/models/cube.obj");
     if (xyzMesh === undefined || headMesh === undefined || bodyMesh === undefined || cubeMesh === undefined ) return scene;
 
     // load materials
     let headMat: wt.Material = new wt.Material();
-    headMat.albedoMap = await wt.TextureLoader.load("assets/textures/01_Head_Base_Color.jpg", true);
-    headMat.metallicMap = await wt.TextureLoader.load("assets/textures/01_Head_MetallicRoughness.jpg", true);
+    headMat.albedoMap = await wt.TextureLoader.load("assets/textures/meetman/01_Head_Base_Color.jpg", true);
+    headMat.metallicMap = await wt.TextureLoader.load("assets/textures/meetman/01_Head_MetallicRoughness.jpg", true);
 
     let bodyMat: wt.Material = new wt.Material();
-    bodyMat.albedoMap = await wt.TextureLoader.load("assets/textures/02_Body_Base_Color.jpg", true);
-    bodyMat.metallicMap = await wt.TextureLoader.load("assets/textures/02_Body_MetallicRoughness.jpg", true);
+    bodyMat.albedoMap = await wt.TextureLoader.load("assets/textures/meetman/02_Body_Base_Color.jpg", true);
+    bodyMat.metallicMap = await wt.TextureLoader.load("assets/textures/meetman/02_Body_MetallicRoughness.jpg", true);
 
     let xyzMat: wt.Material = new wt.Material();
     xyzMat.baseColor = new THREE.Vector3(0.8, 0.3, 0.3);

@@ -1,24 +1,31 @@
 {
-  "name": "wtrace-cdp",
+  "name": "cdp-wtrace-web",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build"
+    "dev": "webpack --mode development && webpack serve --mode development"
   },
   "dependencies": {
     "socket.io-client": "^4.7.5",
-    "wtrace": "file:../wtrace",
-    "three": "^0.139.2"
+    "three": "^0.139.2",
+    "wtrace": "file:../wtrace"
   },
   "devDependencies": {
     "@types/node": "^20.5.0",
     "@types/socket.io-client": "^3.0.0",
-    "@webgpu/types": "^0.1.21",
     "@types/three": "^0.159.0",
+    "@webgpu/types": "^0.1.21",
+    "css-loader": "^5.2.0",
+    "jshint": "^2.12.0",
+    "path": "^0.12.7",
+    "source-map-loader": "^5.0.0",
+    "style-loader": "^3.3.1",
+    "ts-loader": "^8.1.0",
     "ts-node": "^10.9.1",
+    "ts-shader-loader": "^1.0.6",
     "typescript": "^5.2.2",
-    "vite": "^5.2.0"
+    "webpack": "^5.18.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.4"
   }
 }
