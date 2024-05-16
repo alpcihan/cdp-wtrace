@@ -5,7 +5,7 @@ const cdp_web_server_port = 3000;
 var cdp_client = require("./cdp_client/cdp_client");
 var wtrace_cdp_web_server = require("./cdp-wtrace-web-server/cdp-wtrace-web-server");
 
-var exampleData = require("./example-data")
+var mock = require("./mock")
 
 // cdp callback (GetSceneDataStream)
 function cdp_getSceneDataStreamCallback(response) {
@@ -14,7 +14,7 @@ function cdp_getSceneDataStreamCallback(response) {
 
 // cdp mock callback
 function cdp_mockCallback() {
-    setInterval(() => sendExampleData(), 10000);
+    setInterval(() => sendExampleData(), 5000);
 }
 
 // data sending example
@@ -26,7 +26,7 @@ function sendExampleData() {
         return
     };
 
-    socket.emit("message", exampleData.data);
+    socket.emit("message", mock.getMockData());
     console.log("Sent data to user.")
 }
 
