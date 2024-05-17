@@ -5,12 +5,14 @@ import * as wt from "wtrace";
 import { io } from 'socket.io-client'
 import { SceneData } from './types';
 import {
-    createDefaultCubeScene,
+    createDefaultScene,
     loadLatestRequestedScene,
     loadNewSceneFlag,
     processCDPMessage_NewScene,
 } from './utils';
-import { CDP_TEST_SCENE_DATA } from "./test-data";
+
+// constants
+const cdp_web_server_address: string = "http://localhost:3000";
 
 // camera
 let cameraController: wt.CameraController;
@@ -24,13 +26,12 @@ async function main() {
 
         await wt.Application.init(canvas);
 
-        // load default scene (currently, wtrace crashes if there is no scene)
-        let defaultScene: wt.Scene = await createDefaultCubeScene();
-
         // create camera and camera controller
         camera = new THREE.PerspectiveCamera(45, canvas.width / canvas.height, 0.01, 1000);
         cameraController = new wt.CameraController({ camera: camera });
-        defaultScene.camera = camera;
+
+        // load default scene (currently, wtrace crashes if there is no scene)
+        let defaultScene: wt.Scene = await createDefaultScene("assets/models/cube.obj", camera);
 
         // load the scene
         wt.SceneManager.loadScene(defaultScene);
@@ -39,7 +40,7 @@ async function main() {
     // init cdp wtrace server connection
     {
         // connect to the wtrace cdp web server and listen scene updates
-        const socket = io("http://localhost:3000");
+        const socket = io(cdp_web_server_address);
         socket.on('message', (message: SceneData) => processCDPMessage_NewScene(message));
     }
 
@@ -53,6 +54,7 @@ async function animate() {
         wt.Application.refresh();
     }
 
+    // load new scene when received from cdp-wtrace-server
     if (loadNewSceneFlag) {
         await loadLatestRequestedScene(camera);
     }

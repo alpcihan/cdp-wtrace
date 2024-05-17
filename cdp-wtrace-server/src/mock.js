@@ -1,8 +1,9 @@
-function rand(max) {
-    return Math.floor(Math.random() * max);
-}
+// see cdp-wtrace-web/src/types.ts for the data formats
 
+// create 20 astronauts with random positions and rotations
 function getMockData() {
+    function rand(max) { return Math.floor(Math.random() * max);}
+
     let rs = 100;
     let data = { meshModelsData: [] };
 

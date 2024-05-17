@@ -1,11 +1,14 @@
+// see cdp-wtrace-web/src/types.ts for the data formats
+
+// imports
+var cdp_client = require("./cdp_client/cdp_client");
+var cdp_wtrace_web_server = require("./cdp-wtrace-web-server/cdp-wtrace-web-server");
+var mock = require("./mock")
+
 // constants
 const cdp_server_address = 'localhost:9009';
 const cdp_web_server_port = 3000;
 
-var cdp_client = require("./cdp_client/cdp_client");
-var wtrace_cdp_web_server = require("./cdp-wtrace-web-server/cdp-wtrace-web-server");
-
-var mock = require("./mock")
 
 // cdp callback (GetSceneDataStream)
 function cdp_getSceneDataStreamCallback(response) {
@@ -19,9 +22,9 @@ function cdp_mockCallback() {
 
 // data sending example
 function sendExampleData() {
-    // try to get the wtrace cdp web socket
-    const socket = wtrace_cdp_web_server.clientSocket();
-    // return if the wtrace cdp web is not connected
+    // try to get the cdp-wtrace-web socket
+    const socket = cdp_wtrace_web_server.clientSocket();
+    // return if the cdp-wtrace-web is not connected yet
     if (!socket) {
         return
     };
@@ -31,9 +34,10 @@ function sendExampleData() {
 }
 
 function main() {
-    // run wtrace cdp web server
-    wtrace_cdp_web_server.run(cdp_web_server_port);
+    // run wtrace cdp-wtrace-server
+    cdp_wtrace_web_server.run(cdp_web_server_port);
 
+    // send mock test data
     cdp_mockCallback();
 
     // connect to the cdp server

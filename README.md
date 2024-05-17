@@ -1,28 +1,21 @@
 # WTrace-CDP
 
-WTrace-CDP integration
+CDP-WTrace integration
 
-## Getting started
-
-### Setup
-Example folder structure:
-
-    .
-    ├── ...
-    ├── root                    
-    │   ├── wtrace          
-    │   └── cdp-wtrace-web
-    │   └── cdp-wtrace-server
-    └── ...
+<img width="360" alt="task3_task7_PNG" src="./resources/meetman_xyz.jpg">
+<img width="360" alt="task3_task7_PNG" src="./resources/marienplatz.jpg">
 
 
-Clone the repository recursively:
+## Overview
 
-```sh
-git clone --recursive https://github.com/alpcihan/cdp-wtrace
-```
+<img width="620" alt="task3_task7_PNG" src="./resources/overview.jpg">
 
-#### 1) Setup WTrace
+### Notes
+- See [cdp-wtrace-web/src/types.ts](cdp-wtrace-web\src\types.ts) for the data formats between **CDP-WTrace-Web** and **CDP-WTrace-Server**.
+
+## Setup
+
+### 1) Setup WTrace library
 Install the dependencies and build the project:
 ```sh
 cd wtrace
@@ -30,28 +23,27 @@ npm install
 npm run build
 ```
 
-#### 2) Setup CDP-WTrace Web Application
+### 2) Setup CDP-WTrace Web Application
 Install the dependencies:
 ```sh
 cd cdp-wtrace-web
 npm install
 ```
 
-#### 3) Setup CDP-WTrace Server
+### 3) Setup CDP-WTrace Server
 Install the dependencies:
 ```sh
 cd cdp-wtrace-server
 npm install
 ```
 
-### How to run?
+## How to run?
 
 #### 1) Run CDP-WTrace Server
 ```sh
 cd cdp-wtrace-server
 npm run dev
 ```
-
 
 #### 2) Run CDP-WTrace Web Application
 ```sh
@@ -60,7 +52,6 @@ npm run dev
 ```
    
 ### Development
-If an update is made to the wtrace repository:
+If an update is made to the wtrace library repository:
 
-1) run ```npm run build``` at the wtrace directory.
-2) run ```npm update wtrace``` at the wtrace-cdp-web directory.
+1) run ```npm run build``` at the wtrace library directory

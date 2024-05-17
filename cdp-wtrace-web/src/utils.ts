@@ -2,28 +2,6 @@ import * as wt from "wtrace"
 import { SceneData } from "./types";
 import * as THREE from "three"
 
-export async function createDefaultCubeScene(): Promise<wt.Scene> {
-    // create empty scene
-    let scene: wt.Scene = new wt.Scene();
-
-    // load the default cube mesh
-    let mesh: wt.Mesh | undefined = await wt.MeshLoader.load("assets/models/cube.obj");
-    if (mesh === undefined) return scene;
-
-    // load the default texture (currently, wtrace crashes if there is not at least one texture)
-    let material: wt.Material = new wt.Material();
-    material.albedoMap = await wt.TextureLoader.load("assets/textures/default.jpg");
-
-    let model: wt.MeshModel = new wt.MeshModel(mesh, material);
-
-    scene.add(model);
-
-    return scene;
-}
-
-const meshPathToMeshMap: Map<string, wt.Mesh> = new Map<string, wt.Mesh>();             // temporary workaround to cache already loaded meshes
-const texturePathToTextureMap: Map<string, wt.Texture> = new Map<string, wt.Texture>(); // temporary workaround to cache already loaded textures
-
 export let loadNewSceneFlag: boolean = false;
 
 let latestRequestedSceneData: SceneData;
@@ -45,16 +23,12 @@ export async function loadLatestRequestedScene(camera: THREE.Camera): Promise<vo
 
         // currently only support obj
         if (!meshPath.endsWith('.obj'))
-            return;
+            continue;
 
         // load the mesh
-        let mesh: wt.Mesh | undefined = meshPathToMeshMap.get(meshPath);
+        let mesh: wt.Mesh | undefined = await wt.MeshLoader.load(meshPath);
         if (mesh == undefined) {
-            mesh = await wt.MeshLoader.load(meshPath);
-            if (mesh == undefined) {
-                return;
-            }
-            meshPathToMeshMap.set(meshPath, mesh);
+            continue;
         }
 
         // create the material
@@ -63,31 +37,23 @@ export async function loadLatestRequestedScene(camera: THREE.Camera): Promise<vo
 
             // try to load albedo map
             if (meshModelData.materialData.albedoMap) {
+                let flipY: boolean = meshModelData.materialData.albedoMap.flipY ? meshModelData.materialData.albedoMap.flipY : false;
+                let texture: wt.Texture | undefined = await wt.TextureLoader.load(meshModelData.materialData.albedoMap.path, flipY);
 
-                let texture: wt.Texture | undefined = texturePathToTextureMap.get(meshModelData.materialData.albedoMap.path);
                 if (texture === undefined) {
-                    let flipY: boolean = meshModelData.materialData.albedoMap.flipY ? meshModelData.materialData.albedoMap.flipY : false;
-                    texture = await wt.TextureLoader.load(meshModelData.materialData.albedoMap.path, flipY);
-                    if (texture === undefined) {
-                        return;
-                    }
-                    texturePathToTextureMap.set(meshModelData.materialData.albedoMap.path, texture)
+                    continue;
                 }
 
                 material.albedoMap = texture;
-
             }
 
             // try to load metallic-roughness map
             if (meshModelData.materialData.metallicRoughnessMap) {
-                let texture: wt.Texture | undefined = texturePathToTextureMap.get(meshModelData.materialData.metallicRoughnessMap.path);
+                let flipY: boolean = meshModelData.materialData.metallicRoughnessMap.flipY ? meshModelData.materialData.metallicRoughnessMap.flipY : false;
+                let texture: wt.Texture | undefined = await wt.TextureLoader.load(meshModelData.materialData.metallicRoughnessMap.path, flipY);
+
                 if (texture === undefined) {
-                    let flipY: boolean = meshModelData.materialData.metallicRoughnessMap.flipY ? meshModelData.materialData.metallicRoughnessMap.flipY : false;
-                    texture = await wt.TextureLoader.load(meshModelData.materialData.metallicRoughnessMap.path, flipY);
-                    if (texture === undefined) {
-                        return;
-                    }
-                    texturePathToTextureMap.set(meshModelData.materialData.metallicRoughnessMap.path, texture)
+                    continue;
                 }
 
                 material.metallicMap = texture;
@@ -130,4 +96,24 @@ export async function loadLatestRequestedScene(camera: THREE.Camera): Promise<vo
 
     // load the created scene
     wt.SceneManager.loadScene(scene);
+}
+
+export async function createDefaultScene(meshPath: string, camera: THREE.Camera): Promise<wt.Scene> {
+    // create empty scene
+    let scene: wt.Scene = new wt.Scene();
+    scene.camera = camera;
+
+    // load the default cube mesh
+    let mesh: wt.Mesh | undefined = await wt.MeshLoader.load(meshPath);
+    if (mesh === undefined) return scene;
+
+    // load the default texture (currently, wtrace crashes if there is not at least one texture)
+    let material: wt.Material = new wt.Material();
+    material.albedoMap = await wt.TextureLoader.load("assets/textures/default.jpg"); // 1024x1024 white texture
+
+    let model: wt.MeshModel = new wt.MeshModel(mesh, material);
+
+    scene.add(model);
+
+    return scene;
 }
