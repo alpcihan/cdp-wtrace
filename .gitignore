@@ -1,9 +1,6 @@
 /dist
 
-*.obj
-*.png
-*.jpg
-*.glb
+/cdp-wtrace-web/assets
 
 lib-cov
 *.seed
