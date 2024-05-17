@@ -2,8 +2,8 @@
 
 CDP-WTrace integration
 
-<img width="520" alt="task3_task7_PNG" src="./resources/meetman_xyz.jpg">
-<img width="520" alt="task3_task7_PNG" src="./resources/marienplatz.jpg">
+<img width="620" alt="task3_task7_PNG" src="./resources/meetman_xyz.jpg">
+<img width="620" alt="task3_task7_PNG" src="./resources/marienplatz.jpg">
 
 
 ## Overview
