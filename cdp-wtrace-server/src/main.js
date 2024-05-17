@@ -17,7 +17,7 @@ function cdp_getSceneDataStreamCallback(response) {
 
 // cdp mock callback
 function cdp_mockCallback() {
-    setInterval(() => sendExampleData(), 5000);
+    setInterval(() => sendExampleData(), 10000); // send every 10 seconds
 }
 
 // data sending example
@@ -29,7 +29,7 @@ function sendExampleData() {
         return
     };
 
-    socket.emit("message", mock.getMockData());
+    socket.emit("message", mock.data);
     console.log("Sent data to user.")
 }
 
