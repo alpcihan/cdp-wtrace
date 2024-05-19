@@ -11,7 +11,7 @@ CDP-WTrace integration
 <img width="620" alt="task3_task7_PNG" src="./resources/overview.jpg">
 
 ### Notes
-- See [cdp-wtrace-web/src/types.ts](cdp-wtrace-web\src\types.ts) for the data formats between **CDP-WTrace-Web** and **CDP-WTrace-Server**.
+- See [cdp-wtrace-web/src/types.ts](./cdp-wtrace-web/src/types.ts) for the data formats between **CDP-WTrace-Web** and **CDP-WTrace-Server**.
 
 ## Setup
 
