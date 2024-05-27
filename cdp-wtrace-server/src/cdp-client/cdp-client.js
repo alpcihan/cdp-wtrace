@@ -1,4 +1,4 @@
-var PROTO_PATH = __dirname + '/cdp_api.proto';
+var PROTO_PATH = __dirname + '/cdp-api.proto';
 
 // imports
 var parseArgs = require('minimist');

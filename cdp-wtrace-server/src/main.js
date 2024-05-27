@@ -1,7 +1,7 @@
 // see cdp-wtrace-web/src/types.ts for the data formats
 
 // imports
-var cdp_client = require("./cdp_client/cdp_client");
+var cdp_client = require("./cdp-client/cdp-client");
 var cdp_wtrace_web_server = require("./cdp-wtrace-web-server/cdp-wtrace-web-server");
 var mock = require("./mock")
 
